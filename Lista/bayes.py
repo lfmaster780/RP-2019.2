@@ -1,8 +1,8 @@
 arquivo = open("base.csv","r", encoding = "utf8")
 arq = arquivo.readlines()
-tp = 0.25
+tp = 0.4
 zn = 1.96
-splits = 50
+splits = 7
 
 classificacao = []
 itens = []
@@ -36,7 +36,7 @@ model = GaussianNB()
 #Dividir treino e teste
 from sklearn.model_selection import train_test_split
 
-X_train, X_test, y_train, y_test = train_test_split(pontos, classificacoes, test_size=tp, random_state=0)
+X_train, X_test, y_train, y_test = train_test_split(pontos, classificacoes, test_size=tp, random_state=100)
 model.fit(X_train, y_train)
 
 classes = list(lenc.inverse_transform(model.classes_))
@@ -90,6 +90,8 @@ while entrada != "0" and entrada != "":
     entrada = vecE.fit_transform([entrada]).toarray()
 
     print (list(lenc.inverse_transform(model.classes_)))
-    # print (list(model.class_prior_))
+    print ("Probabilidade:", model.predict_proba(entrada))
     print ("Predicted Class:", list(lenc.inverse_transform(model.predict(entrada))))
-    entrada = input()
+    entrada = str(input())
+
+arquivo.close()
