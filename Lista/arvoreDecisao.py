@@ -5,7 +5,7 @@ arquivo = open("base.csv","r", encoding = "utf8")
 arq = arquivo.readlines()
 tp = 0.4
 zn = 1.96
-
+splits = 15
 classificacao = []
 itens = []
 
@@ -35,6 +35,7 @@ from sklearn.model_selection import train_test_split
 X_train, X_test, y_train, y_test = train_test_split(pontos, classificacoes, test_size=tp, random_state=100)
 
 from sklearn import tree
+#Utiliza metodo Gini (Metodo para otimizar os erros de classificacao)
 clf = tree.DecisionTreeClassifier()
 clf.fit(X_train, y_train)
 
@@ -68,6 +69,13 @@ for i in range(len(X_test)):
     else:
         print("Errou")
 
+print("\nAplicando cross validation\n")
+from sklearn.model_selection import cross_val_score
+scores = cross_val_score(clf, pontos, classificacoes, cv=splits)
+print("Com",splits,"splits")
+print("Taxa de Acerto:", str(scores.mean()*100) + "%, desvio de +/- ", scores.std() * 2 * 100, "%\n")
+
+
 print("")
 entrada = str(input())
 while entrada != "0" and entrada != "":
@@ -82,16 +90,7 @@ while entrada != "0" and entrada != "":
     entrada = str(input())
 
 print("")
-# from sklearn.externals.six import StringIO
-# from IPython.display import Image
-# from sklearn.tree import export_graphviz
-# import pydotplus
-# print("Gerando arvore")
-# dot_data = StringIO()
-# export_graphviz(clf, out_file=dot_data,
-#                 filled=True, rounded=True,
-#                 special_characters=True, feature_names = vectorizer.get_feature_names(),class_names=['0','1','2'])
-# graph = pydotplus.graph_from_dot_data(dot_data.getvalue())
-# graph.write_png('arvore.png')
-# Image(graph.create_png())
-# arquivo.close()
+
+print("Gerando arvore construida:")
+tree.plot_tree(clf, filled=True)
+plt.show()
