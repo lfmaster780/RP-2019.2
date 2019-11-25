@@ -21,7 +21,7 @@ for k in caminhosCanguru:
 
 
 from skimage.transform import rescale, resize, downscale_local_mean
-from skimage import filters
+from skimage import filters, util
 from skimage import feature
 from skimage import morphology
 for j in range(len(flamingos)):
@@ -32,7 +32,7 @@ for j in range(len(flamingos)):
 
     flamingos[j] = morphology.area_closing(flamingos[j])
     flamingos[j] = feature.canny(flamingos[j],sigma = 1)
-
+    flamingos[j] = util.img_as_float32(flamingos[j])
     #imshow(flamingos[j])
     #plt.show()
 
@@ -43,5 +43,29 @@ for j in range(len(cangurus)):
     cangurus[j] = filters.roberts(cangurus[j])
     cangurus[j] = morphology.area_closing(cangurus[j])
     cangurus[j] = feature.canny(cangurus[j], sigma = 1)
-    imshow(cangurus[j])
-    plt.show()
+    cangurus[j] = util.img_as_float32(cangurus[j])
+    #imshow(cangurus[j])
+    #plt.show()
+
+fla = []
+can = []
+
+for flamingo in flamingos:
+    item = []
+    for k in flamingo:
+        item.append(sum(k))
+
+    fla.append(item)
+
+for canguru in cangurus:
+    chave = []
+    for k in canguru:
+        chave.append(sum(k))
+
+    can.append(chave)
+
+print(len(fla),len(can))
+
+import torch
+from torch.autograd import Variable
+import torch.nn.functional as F
