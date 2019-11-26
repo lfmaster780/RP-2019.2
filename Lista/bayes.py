@@ -2,7 +2,7 @@ arquivo = open("base.csv","r", encoding = "utf8")
 arq = arquivo.readlines()
 tp = 0.4
 zn = 1.96
-splits = 7
+splits = 3
 
 classificacao = []
 itens = []
@@ -30,8 +30,8 @@ from sklearn import preprocessing
 lenc = preprocessing.LabelEncoder()
 classificacoes = lenc.fit_transform(classificacao)
 
-from sklearn.naive_bayes import GaussianNB
-model = GaussianNB()
+from sklearn.naive_bayes import BernoulliNB
+model = BernoulliNB()
 
 #Dividir treino e teste
 from sklearn.model_selection import train_test_split
@@ -41,7 +41,9 @@ model.fit(X_train, y_train)
 
 classes = list(lenc.inverse_transform(model.classes_))
 #Prob a priori
-priores = list(model.class_prior_)
+priores = list(model.class_log_prior_)
+
+
 
 for i in range(len(classes)):
     print("Classe:", classes[i], "Prob priori: ", priores[i])

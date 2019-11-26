@@ -3,9 +3,9 @@ import random
 
 arquivo = open("base.csv","r", encoding = "utf8")
 arq = arquivo.readlines()
-tp = 0.4
+tp = 0.25
 zn = 1.96
-splits = 15
+splits = 5
 classificacao = []
 itens = []
 
@@ -91,6 +91,6 @@ while entrada != "0" and entrada != "":
 
 print("")
 
-print("Gerando arvore construida:")
+print("Gerando arvore construida")
 tree.plot_tree(clf, filled=True)
 plt.show()
